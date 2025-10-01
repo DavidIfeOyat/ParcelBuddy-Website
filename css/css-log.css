@@ -1,0 +1,443 @@
+/* Navigation bar styling */
+
+.navbar {
+    background-color: green;
+}
+
+/* This will add a background color on scroll or adjust other styles */
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: background-color 0.3s ease-in-out; /* This is for Smooth transition effect */
+}
+
+.navbar-heading {
+    font-size: 1.5rem; /* Adjust the font size as needed */
+    margin-left: 10px; /* Add margin to separate it from the logo */
+    color: #ffffff; /* Text color */
+    font-weight: bold;
+}
+
+/* CSS style for the logout link */
+.navbar-nav .nav-item .nav-link.logout-btn {
+    background-color: white;
+    color: green;
+    border: 1px solid white;
+    padding: 8px 15px;
+    transition: all 0.3s;
+}
+
+.navbar-nav .nav-item .nav-link.logout-btn:hover {
+    background-color: red;
+    color: white;
+}
+
+
+/* End of Navbar styling*/
+/* Styling for Login page */
+body.Log-body {
+    background-color: whitesmoke;
+    padding-top: 170px;
+    font-family: Cambria;
+}
+
+form.login-form {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: lightgray;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    text-align: center;
+}
+
+/* Style the heading within the form */
+h1.form-title {
+    text-align: center;
+    text-decoration-thickness: 20px;
+    color: dimgray;
+    font-size: 20px;
+}
+
+/* Style the labels for login form inputs */
+label.login-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* Style the login form input fields */
+input.login-input {
+    width: 100%;
+    padding: 10px;
+    color: black;
+    margin-bottom: 15px;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input.login-input:hover{
+    background-color: whitesmoke;
+}
+
+/* Style the login button */
+button.login-button {
+    font-family: Cambria;
+    font-size: 17px ;
+    width: 35%;
+    padding: 6px;
+    background-color: black;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style the login button on hover */
+button.login-button:hover {
+    background-color: whitesmoke;
+    color: black;
+}
+
+/* Style error messages */
+p.error-message {
+    color: #dc3545;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+}
+
+.error-input {
+    border: 1px solid rgba(255, 56, 96, 0.8);
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 56, 96, 0.5);
+}
+
+/* Css Styling for the Manager and delivery information page*/
+/* Add the following styles for the suggestion list */
+#suggestion-list {
+    list-style: none;
+    margin-top: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+    width: 94%;
+    max-height: 200px; /* Set a maximum height for the suggestion list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+    top: 40px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    background-color: #fff;
+    display: none; /* Hide the suggestion list by default */
+}
+
+#suggestion-list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#suggestion-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.body {
+    margin-top: 100px;
+    font-family: Cambria;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.card-img-top {
+    width: 100%;
+    max-height: 150px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.pagination a {
+    color: #555;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #555;
+    margin: 0 5px;
+    border-radius: 4px;
+    margin-bottom: 5px; /* Add space below each pagination link */
+}
+
+.pagination a:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+.pagination .active {
+    background-color: #555;
+    color: #fff;
+    cursor: default;
+}
+
+.pagination a:disabled {
+    color: #d1d1d1;
+    border-color: #d1d1d1;
+    cursor: not-allowed;
+}
+
+/* End of Css Styling for the add and update delivery page*/
+
+
+/* Css Styling for the add and update delivery page*/
+/* Set the background color of the entire page */
+body {
+    background-color: #f8f9fa;
+    font-family: Cambria;
+}
+
+/* Style for second-level headings */
+h2 {
+    color: #007bff; /* Set the text color of h2 headings to a blue shade */
+}
+
+/* Style for form groups to group related form elements */
+.form-group {
+    margin-bottom: 20px; /* Add bottom margin to form groups */
+}
+
+/* Style for labels associated with form elements */
+label {
+    display: block; /* Display labels as block elements */
+    margin-bottom: 5px; /* Add bottom margin to labels */
+    color: #495057; /* Set the text color of labels */
+    font-weight: bold; /* Make labels bold */
+}
+
+/* Style for text input and select elements */
+input,
+select {
+    width: 100%; /* Ensures these elements stretch to use up all available space in their parent */
+    padding: 10px; /* Nice and cozy padding for comfort while typing */
+    border: 1px solid #ced4da; /* A subtle, light grey border for a clean, defined look */
+    border-radius: 5px; /* Gently rounded corners to soften the design */
+    box-sizing: border-box; /* This makes sure padding and border don't mess with the element's width */
+}
+
+/* Style for the form container */
+.container {
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 70px;
+}
+
+.greeting {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Style for the submit button */
+.button {
+    width: 70%; /* Adjust the button width as needed */
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* Style for the centered button div */
+.update {
+    margin-top: 19px;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.update.button{
+    width: 70px;
+}
+
+/* Basic Table Styles */
+/* Container Styles */
+.table-container {
+    margin: 0 auto; /* Center the container horizontally */
+    max-width: 1300px; /* Set a maximum width for the container */
+    margin-top: 100px;
+}
+
+/* Basic Table Styles */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: grey; /* Header background color */
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: whitesmoke; /* Even row background color */
+}
+
+/* Live Map Stylesheet */
+/* Additional styles for map container */
+.map-container {
+    height: 300px; /* Adjust the height as needed */
+    margin-top: 20px; /* Add margin for spacing */
+    border: 1px solid #ddd; /* Add a border for separation */
+    border-radius: 8px; /* Add border radius for rounded corners */
+    overflow: hidden; /* Hide any overflow */
+}
+
+body.mapping {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+#map {
+    height: 65vh; /* Adjust the height as needed */
+    width: 100%;
+    margin-top: 10px; /* Adjust the margin-top to bring the map down */
+}
+
+.hello{
+    margin-top: 30px;
+}
+
+.no-radius .btn {
+    border-radius: 0;
+}
+
+/* Styling for the overall container */
+.dropdown {
+    display: flex; /* Turns on flexbox for flexible layout options */
+    justify-content: flex-end; /* Scoots the dropdown and button to the right */
+    width: 100%; /* Full width to take advantage of the available space */
+    margin: 10px 0; /* Some vertical space for a less cramped feel */
+}
+
+/* Specific styling for the dropdown */
+.select-status {
+    width: 300px; /* Just the right width for our dropdown */
+    padding: 8px; /* Enough padding to make text easy to read */
+    border: 1px solid #ccc; /* A light grey border for a soft outline */
+    border-radius: 4px; /* Rounded corners for a friendly touch */
+}
+
+/* Button that submits the form */
+.btn-submit {
+    padding: 10px; /* Plump padding makes this button a breeze to click */
+    background-color: #007bff; /* A lovely shade of blue for standing out */
+    color: white; /* White text so it pops against the blue */
+    border: none; /* Keeps it sleek with no borders */
+    border-radius: 4px; /* Keeps the corners matching the dropdown */
+    cursor: pointer; /* The little hand that says 'click me!' */
+    margin-left: 20px; /* Gives a nice little space from the dropdown */
+}
+
+/* Common styling for primary buttons */
+.btn-primary {
+    border: none; /* No borders for a clean, modern look */
+    border-radius: 4px; /* Soft rounded corners for a gentle appearance */
+    cursor: pointer; /* Makes it clear this button is interactive */
+    margin-left: 20px; /* Enough space to distinguish it from nearby elements */
+}
+
+.select-button .btn {
+    border-radius: 0;
+
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 896px) {
+    .navbar-nav .nav-item .nav-link.logout-btn {
+        padding: 6px 12px; /* Adjust padding for smaller size */
+        width: 75px;
+    }
+
+    .navbar-heading {
+        font-size: 15px;
+    }
+
+    body.header {
+        margin: 0; /* This removes the default body margin */
+        padding: 0; /* Removes default body padding */
+    }
+
+    .navbar-brand img {
+        margin-top: -5px;
+    }
+
+
+    /* Style the heading within the form */
+    h1.form-title {
+        font-size: 17px;
+    }
+
+    /* Adjust form width for smaller screens */
+    form.login-form {
+        max-width: 70%;
+    }
+    body {
+        margin-bottom: 10px;
+        margin-top: 25px;
+    }
+    .card-img-top {
+        max-height: 100px;
+    }
+
+    .pagination a {
+        padding: 6px 10px; /* Adjusts padding for pagination links on smaller screens */
+        font-size: 12px; /* Reduces font size for pagination links on smaller screens */
+    }
+
+    .mt-4{
+        font-size: 25px;
+    }
+    .table {
+        overflow-x: auto;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #suggestion-list {
+        width: 81%; /* Adjust the width for smaller screens */
+        top: 35px; /* Adjust the top position */
+    }
+
+    #suggestion-list li {
+        padding: 8px; /* Adjust padding for smaller screens */
+    }
+
+    body.mapping {
+        margin: 10px;
+        padding: 10px;
+        position: relative;
+    }
+
+    #map {
+        height: 60vh; /* Adjust the height as needed */
+        width: 100%;
+    }
+}

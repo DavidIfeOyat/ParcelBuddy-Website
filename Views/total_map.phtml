@@ -1,0 +1,43 @@
+<?php require('template/heading.phtml'); ?>
+
+<body>
+<!-- Wraps the HTML content in a Bootstrap container-fluid -->
+<!-- Include Leaflet CSS and JS files -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<div class="container">
+    <!-- Map Title -->
+    <h2 class="mt-4 text-center">Parcel Buddy Live Map <br> (Showing all delivered parcels) </h2>
+</div>
+
+<div id="map-container">
+    <div id="map"></div>
+</div>
+    <script>
+        // DOM content has to be loaded before executing the script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the map
+            var map = L.map('map').setView([1, 1], 2); // Default view, you can adjust this based on your needs
+
+            // Add a layer of map content tiles
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Fetch delivery locations using AJAX
+            fetch('get_total_location.php') // Create a PHP script to fetch delivery locations based on the logged-in user
+                .then(response => response.json())
+                .then(data => {
+                    // Loop through the data and create markers
+                    data.forEach(location => {
+                        L.marker([location.lat, location.lng])
+                            .addTo(map)
+                            .bindPopup(`<strong>Name: </strong><strong>${location.name}</strong><br>&#127968;<strong>${location.address_1}</strong><br>&#128205;<strong>${location.postcode}</strong><br>&#128666;<strong>${location.status_text}</strong><br>&#128119;<strong>${location.username}</strong>`);
+                    });
+                })
+                .catch(error => console.error('Error fetching delivery locations:', error));
+        });
+    </script>
+
+</body>

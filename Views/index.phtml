@@ -1,0 +1,78 @@
+<?php
+// Include the 'index.php' file to reuse the PHP logic or HTML structure defined there
+require('index.php');
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Link to the external CSS for styling the login page -->
+    <link href="css/css-log.css" rel="stylesheet">
+
+    <!-- JavaScript to disable the browser's back button functionality -->
+    <script>
+        // Push the current URL into the history state
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            // Prevent navigation by pushing the current URL again on popstate event
+            history.pushState(null, null, document.URL);
+        });
+    </script>
+</head>
+<body class="Log-body">
+<!-- Login form definition starting here -->
+<form class="login-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" autocomplete="off" onsubmit="return validateLoginForm();">
+    <h1 class="form-title">Log into your Parcel Buddy account</h1>
+    <!-- Username input field -->
+    <label class="login-label" for="username">USERNAME:</label>
+    <input class="login-input" type="text" id="username" name="username" autocomplete="off" onkeydown="disableBackspace(event);">
+
+    <!-- Password input field -->
+    <label class="login-label" for="password">PASSWORD:</label>
+    <input class="login-input" type="password" id="password" name="password" autocomplete="off" onkeydown="disableBackspace(event);">
+
+    <!-- Placeholder for error messages -->
+    <p id="error-message" class="error-message"></p>
+
+    <!-- PHP code to display an error message if it exists -->
+    <?php if (isset($errorMessage)) { echo "<p class='error-message'>$errorMessage</p>"; } ?>
+
+    <!-- Submission button for the form -->
+    <button class="login-button" type="submit">Login</button>
+</form>
+
+<script>
+    // Function to validate the login form input fields
+    function validateLoginForm() {
+        var usernameInput = document.getElementById('username');
+        var passwordInput = document.getElementById('password');
+        var errorMessageElement = document.getElementById('error-message');
+
+        // Reset styles for error display
+        usernameInput.classList.remove('error-input');
+        passwordInput.classList.remove('error-input');
+        errorMessageElement.textContent = '';
+
+        // Check if both username and password are entered
+        if (usernameInput.value.trim() === '' || passwordInput.value.trim() === '') {
+            errorMessageElement.textContent = 'Please enter both username and password.';
+
+            // Apply error styling to input fields if they are empty
+            if (usernameInput.value.trim() === '') {
+                usernameInput.classList.add('error-input');
+            }
+            if (passwordInput.value.trim() === '') {
+                passwordInput.classList.add('error-input');
+            }
+
+            return false; // Prevent form submission if validation fails
+        }
+        return true; // Allow form submission if validation passes
+    }
+
+</script>
+</body>
+</html>

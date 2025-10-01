@@ -1,0 +1,70 @@
+<?php require('template/heading.phtml'); ?>
+
+<h1><?= $view->pageTitle ?></h1>
+
+<!-- Display success message if user addition was successful -->
+<?php if (isset($_SESSION['userAdded']) && $_SESSION['userAdded']): ?>
+    <div style="color: green;">
+        User added successfully!
+    </div>
+    <?php unset($_SESSION['userAdded']); ?>
+<?php endif; ?>
+
+<!-- Display errors if any -->
+<?php if (!empty($errors)): ?>
+    <div style="color: red;">
+        <ul>
+            <?php foreach ($errors as $error): ?>
+                <li><?= $error ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+<div class="container">
+    <form action="add_deliverer.php" method="POST" onsubmit="return validateUserForm();">
+        <h2 class="mt-4 text-center">Add New User </h2>
+        <div class="form-group">
+            <label for="username">New Username:</label>
+            <input type="text" id="username" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <div class="form-group">
+            <label for="role">Role:</label>
+            <select id="role" name="usertype">
+                <option value="2">Deliverer</option>
+            </select>
+        </div>
+        <div class="update no-radius">
+            <button type="submit" class="btn btn-primary">Add New Deliverer</button>
+        </div>
+    </form>
+
+    <script>
+        function validateUserForm() {
+            var usernameInput = document.getElementById('username');
+            var passwordInput = document.getElementById('password');
+
+            // Reset styles
+            usernameInput.classList.remove('error-input');
+            passwordInput.classList.remove('error-input');
+
+            if (usernameInput.value.trim() === '' || passwordInput.value.trim() === '') {
+                alert('Please enter both username and password.'); // alert for user when not filled
+
+                if (usernameInput.value.trim() === '') {
+                    usernameInput.classList.add('error-input');
+                }
+                if (passwordInput.value.trim() === '') {
+                    passwordInput.classList.add('error-input');
+                }
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</div>

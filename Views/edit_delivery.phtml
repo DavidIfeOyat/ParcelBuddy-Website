@@ -1,0 +1,73 @@
+<?php require('template/heading.phtml'); ?>
+
+<div class="container">
+    <h2 class="mt-4 text-center">Edit Delivery Information</h2>
+
+    <form action="edit_delivery.php" method="post">
+        <input type="hidden" name="id" value="<?php echo $deliveryInfo['id']; ?>">
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="full_name" name="full_name" value="<?php echo $deliveryInfo['full_name']; ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" value="<?php echo $deliveryInfo['address_1']; ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="postCode">Postcode:</label>
+            <input type="text" id="postCode" name="postCode" value="<?php echo $deliveryInfo['postcode']; ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude" value="<?php echo $deliveryInfo['lat']; ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude" value="<?php echo $deliveryInfo['longitude']; ?>" required>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="deliveryDet">Deliverer Name:</label>
+            <select id="deliveryDet" name="deliveryDet" required>
+                <?php
+                // Fetch deliverer usernames from the database
+                $delivererDataSet = new DelivererDataSet();
+                $deliverers = $delivererDataSet->fetchDelivererUsernames();
+
+                // Display each deliverer as an option in the dropdown
+                foreach ($deliverers as $deliverer) {
+                    echo '<option value="' . $deliverer['userid'] . '" ' . ($deliveryInfo['deliverer'] == $deliverer['userid'] ? 'selected' : '') . '>' . $deliverer['username'] . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="statusText">Parcel Status:</label>
+            <select id="statusText" name="statusText" required>
+                <?php
+                // Fetch status texts from the database
+                $statusDataSet = new DelivererDataSet();
+                $statuses = $statusDataSet->fetchStatusTexts();
+
+                // Display each status text as an option in the dropdown
+                foreach ($statuses as $status) {
+                    echo '<option value="' . $status['idstatus'] . '" ' . ($deliveryInfo['status_num'] == $status['idstatus'] ? 'selected' : '') . '>' . $status['status_text'] . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+        <div class="update no-radius">
+            <button type="submit" class="btn btn-primary text-center">Update Delivery Information</button>
+        </div>
+    </form>
+</div>
+
+</html>

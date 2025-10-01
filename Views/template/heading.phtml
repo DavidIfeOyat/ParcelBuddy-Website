@@ -1,0 +1,81 @@
+<?php
+session_start(); // session is started
+
+if (!isset($_SESSION['user_id'])) { // Assuming 'user_id' is set upon login.
+    // User is not logged in, redirect to login page.
+    header('Location: index.phtml');
+    exit();
+}
+
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/css-log.css">
+    <link rel="icon" type="image/x-icon" href="images/pblogo.png">
+    <title> PARCEL BUDDY </title>
+</head>
+<body class="header">
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <a class="navbar-brand" href="#">
+        <img src="images/pblogo.png" width="79" height="50" class="d-inline-block align-top" alt="Logo">
+    </a>
+    <a class="navbar-brand" href="#">
+        <h1 class="navbar-heading">Welcome to Parcel Buddy</h1>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link logout-btn" href="#" onclick="confirmLogout()">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    let timeoutWarning;
+    let sessionTimeout = 30 * 60 * 1000; // 30 minutes
+
+    function startSessionTimeoutWarning() {
+        // Warning 5 minutes before session expires
+        timeoutWarning = setTimeout(function() {
+            if (confirm('Your session is about to expire. Would you like to extend it?')) {
+
+                // Placeholder for extending the session
+                console.log("Session extended.");
+                clearTimeout(timeoutWarning);
+                startSessionTimeoutWarning(); // Restart the warning timer
+            }
+        }, sessionTimeout - 5 * 60 * 1000);
+    }
+
+    function confirmLogout() {
+        var logoutConfirmation = confirm("Are you sure you want to logout?");
+        if (logoutConfirmation) {
+            window.location.href = "logout.php";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', startSessionTimeoutWarning);
+</script>
+
+<!-- Bootstrap JS and Popper.js (required for Bootstrap JavaScript components) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

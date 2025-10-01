@@ -1,0 +1,277 @@
+<?php require('template/heading.phtml'); ?>
+
+<body>
+<?php if (!isset($_SESSION)) session_start(); ?>
+
+<!-- Including Leaflet CSS and JS files -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<div class="container">
+    <div class="greeting">
+        <?php
+        // Check if the username session variable is set and not empty
+        if (isset($_SESSION['username']) && !empty($_SESSION['username'])) {
+            echo "Hello there, " . htmlspecialchars($_SESSION['username']) . "!";
+        }
+        ?>
+    </div>
+
+    <!-- A container for the map -->
+    <div id="map" style="height: 400px; margin-bottom: 10px"></div>
+
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mb-3">
+        <div class="search-container input-group no-radius">
+            <input type="text" id="search" name="search" class="form-control" placeholder="Enter search term" aria-label="Search" aria-describedby="button-search">
+            <button class="btn btn-primary" type="submit" id="button-search">Search</button>
+
+            <ul id="suggestion-list"></ul>
+        </div>
+    </form>
+
+    <!-- Add a container for the status filter dropdown -->
+    <div class="dropdown">
+        <select class="select-status" id="statusFilter" name="statusFilter">
+            <option value="">All Deliveries</option>
+            <option value="5">Ordered Deliveries</option>
+            <option value="6">Scanned Deliveries</option>
+            <option value="7">Shipped Deliveries</option>
+            <option value="8">Local Courier Received Deliveries</option>
+            <option value="9">Out for Delivery Deliveries</option>
+            <option value="10">Delivered Deliveries</option>
+        </select>
+
+        <div class="select-button">
+            <button class="btn btn-submit" id="filterBtn">Filter</button>
+        </div>
+    </div>
+
+    <!-- JavaScript to handle the filter button click -->
+    <script>
+        document.getElementById('filterBtn').addEventListener('click', function() {
+            var status = document.getElementById('statusFilter').value;
+            // This redirects the user to the same page with the selected status filter
+            window.location.href = 'deliverer_page.php?status=' + status;
+        });
+    </script>
+
+    <div class="row">
+        <?php foreach ($view->delivererDataSet as $delivererInfo) : ?>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <!-- Card body section where deliverer details are displayed -->
+                    <div class="card-body">
+                        <h5 class="card-title"><?= $delivererInfo->getName() ?></h5>
+                        <p class="card-text">Address: <?= $delivererInfo->getAddress() ?></p>
+                        <p class="card-text">Postcode: <?= $delivererInfo->getPostCode() ?></p>
+                        <p class="card-text">Deliverer Name: <?= $delivererInfo->getDeliveryDet() ?></p>
+                        <p class="card-text">Latitude: <?= $delivererInfo->getLatitude() ?></p>
+                        <p class="card-text">Longitude: <?= $delivererInfo->getLongitude() ?></p>
+                        <p class="card-text">Parcel Status: <?= $delivererInfo->getStatusText() ?></p>
+
+                        <div class="no-radius">
+                            <a href="update_status.php?id=<?php echo $delivererInfo->getUserID(); ?>" class="btn btn-warning">UPDATE STATUS</a>
+                            <button type="button" class="btn btn-primary generate-qr" data-userid="<?= $delivererInfo->getUserID(); ?>">SHOW QR CODE</button>
+                        </div>
+
+                    </div>
+                    <img src="https://loremflickr.com/400/300/parcel" alt="unavailable" class="card-img-top" />
+
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="pagination">
+        <?php
+
+        if (isset($view->currentPage) && isset($view->totalPages)) {
+            if ($view->currentPage > 1) {
+                echo '<a href="?page=1">First</a>';
+            }
+            if ($view->currentPage > 1) {
+                echo '<a href="?page=' . ($view->currentPage - 1) . '">Previous</a>';
+            }
+            if ($view->currentPage < $view->totalPages) {
+                echo '<a href="?page=' . ($view->currentPage + 1) . '">Next</a>';
+            }
+            if ($view->currentPage < $view->totalPages) {
+                echo '<a href="?page=' . $view->totalPages . '">Last</a>';
+            }
+        }
+        ?>
+    </div>
+</div>
+
+<!-- QR Code Modal -->
+<div class="modal fade" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrCodeModalLabel">QR Code</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="qrCodeContainer"></div> <!-- Container for the QR Code -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include QRCode.js and Bootstrap JS for functionality -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // This script listens for the DOM to fully load before initializing its main functionalities.
+    document.addEventListener('DOMContentLoaded', function() {
+        // Logging to indicate the start of the script's execution.
+        console.log('Document is ready. Kick-starting the functionalities.');
+
+        // QR Code Generation
+        // Grabs all elements with the 'generate-qr' class, which are our QR code generation buttons.
+        var generateQRButtons = document.querySelectorAll('.generate-qr');
+        // Log the count of found buttons for debugging purposes.
+        console.log('QR code buttons found:', generateQRButtons.length);
+
+        // Loop through each button to attach click event listeners.
+        generateQRButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                console.log('QR code generation initiated.');
+                // Extract user ID set on the button, which is used in QR code data.
+                var userID = this.getAttribute('data-userid');
+                console.log('Processing QR code for User ID:', userID);
+
+                // Traverse the DOM to find sibling elements containing user data.
+                var cardBody = this.closest('.card').querySelector('.card-body');
+                // Extract user information from the card.
+                var name = cardBody.querySelector('.card-title').textContent.trim();
+                var address = cardBody.querySelectorAll('.card-text')[0].textContent.trim();
+                var postcode = cardBody.querySelectorAll('.card-text')[1].textContent.trim();
+                var delivererName = cardBody.querySelectorAll('.card-text')[2].textContent.trim();
+
+                // Prepare the string that will be encoded into the QR code.
+                var infoString = `Name: ${name}\n${address}\n${postcode}\n${delivererName}`;
+                console.log('QR code data:', infoString);
+
+                // Get the modal and the container where the QR code will be displayed.
+                var modal = document.getElementById('qrCodeModal');
+                var qrCodeContainer = document.getElementById('qrCodeContainer');
+                qrCodeContainer.innerHTML = ""; // Clear any previously generated QR code.
+
+                // Generate a new QR code with the user's information.
+                new QRCode(qrCodeContainer, {
+                    text: infoString,
+                    width: 300,
+                    height: 250,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                console.log('QR code generated successfully.');
+                // Display the modal with the newly generated QR code.
+                $(modal).modal('show');
+                console.log('QR code modal displayed.');
+            });
+        });
+
+        // Map Initialization and Marker Placement
+        // Initialize the map to a predefined location.
+        console.log('Setting up the map...');
+        var map = L.map('map').setView([53.4872, -2.2737], 10);
+        console.log('Map centered on the initial location.');
+
+        // Setting up search and autocomplete functionality.
+        var searchInput = document.getElementById('search');
+        var suggestionList = document.getElementById('suggestion-list');
+
+        // Centers the map on a predefined location. Useful for resetting the map view.
+        function centerMapOnDefaultLocation() {
+            map.setView([53.4872, -2.2737], 10);
+            console.log('Map re-centered on the default location.');
+        }
+
+        // Apply the centering function to set the initial map view.
+        centerMapOnDefaultLocation();
+
+        // Load and display map tiles using OpenStreetMap data.
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        console.log('Map tiles added. Map is now visible.');
+
+        // Fetch and display delivery location markers on the map.
+        fetch('get_delivery_locations.php')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Delivery locations data received.');
+                data.forEach(location => {
+                    L.marker([location.lat, location.lng])
+                        .addTo(map)
+                        .bindPopup(`&#128100; ${location.name}<br>&#127969; ${location.address_1}<br>&#128205; ${location.postcode}<br>&#128666; ${location.status_text}<br>&#128119; ${location.username}`);
+                });
+
+                // Add marker for the hardcoded location with the Deliverer's username
+                var delivererMarker = L.marker([53.4872, -2.2737])
+                    .addTo(map)
+                    .bindPopup(`&#128119;${data[0].username}<strong>: Current Location</strong>`); // Use the Deliverer's username from the first data item
+                console.log('Deliverer marker added to map.');
+
+            })
+            .catch(error => console.error('Error loading delivery locations:', error));
+
+        // Autocomplete functionality for the search input.
+        searchInput.addEventListener('input', function() {
+            var searchTerm = this.value;
+            console.log('User searching for:', searchTerm);
+
+            // Only proceed if the search term is 2 or more characters.
+            if (searchTerm.length >= 2) {
+                // Perform a search against the server-side autocomplete endpoint.
+                fetch(`autocomplete2.php?term=${searchTerm}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Autocomplete suggestions:', data);
+                        suggestionList.innerHTML = ''; // Clear previous suggestions.
+
+                        // Create a list item for each suggestion and append to the suggestions list.
+                        data.forEach(function(suggestion) {
+                            var suggestionItem = document.createElement('li');
+                            suggestionItem.innerHTML = `<strong>${suggestion.full_name}</strong>, &#128205; ${suggestion.address_1}, ${suggestion.postcode}, &#128666; ${suggestion.username}, Latitude: ${suggestion.lat}, Longitude: ${suggestion.longitude}`;
+                            suggestionItem.addEventListener('click', function() {
+                                // On selecting a suggestion, fill the search input with the full name, clear suggestions, and zoom into the location on the map.
+                                searchInput.value = suggestion.full_name;
+                                suggestionList.innerHTML = '';
+                                map.setView([suggestion.lat, suggestion.longitude], 15);
+                                console.log(`Zooming into ${suggestion.full_name}'s location.`);
+                            });
+                            suggestionList.appendChild(suggestionItem);
+                        });
+
+                        suggestionList.style.display = 'block'; // Show suggestions.
+                    })
+                    .catch(error => console.error('Failed to fetch autocomplete suggestions:', error));
+            } else {
+                suggestionList.style.display = 'none'; // Hide suggestions if the search term is too short.
+            }
+        });
+
+        // Hide the suggestion list when clicking outside of the search input.
+        document.addEventListener('click', function(event) {
+            if (event.target.id !== 'search') {
+                suggestionList.style.display = 'none';
+                console.log('Suggestions list hidden.');
+            }
+        });
+    });
+</script>
+
+</body>

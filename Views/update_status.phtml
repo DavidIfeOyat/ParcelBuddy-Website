@@ -1,0 +1,30 @@
+<?php require('template/heading.phtml'); ?>
+
+<div class="container no-radius">
+    <h2 class="mt-4 text-center"> Update Delivery Status</h2>
+
+    <form action="update_status.php" method="post">
+        <input type="hidden" name="id" value="<?php echo $deliveryInfo['id']; ?>">
+
+        <div class="form-group">
+            <label for="statusText">Parcel Status:</label>
+            <select id="statusText" name="statusText" required>
+                <?php
+                // Fetch status texts from the database
+                $statusDataSet = new DelivererDataSet();
+                $statuses = $statusDataSet->fetchStatusTexts();
+
+                // Display each status text as an option in the dropdown
+                foreach ($statuses as $status) {
+                    echo '<option value="' . $status['idstatus'] . '" ' . ($deliveryInfo['status_num'] == $status['idstatus'] ? 'selected' : '') . '>' . $status['status_text'] . '</option>';
+                }
+                ?>
+            </select>
+        </div>
+        <div class="update no-radius">
+            <button type="submit" class="btn btn-primary text-center">Update Delivery</button>
+        </div>
+    </form>
+</div>
+
+</html>
