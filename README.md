@@ -95,9 +95,7 @@ This project helped me build practical experience in:
 ---
 
 ## Screenshots
-
- /docs/screenshots/admin-dashboard.jpeg
-
+ images/admin-dashboard.png
 ---
 
 ## Setup Notes
